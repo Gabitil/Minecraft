@@ -11,7 +11,7 @@ end
 
 -- Função para verificar se o armazem está vazio (true) ou não (false)
 local function bauVazio()
-  return ladoBau.getInput(ladoBau)
+  return redstone.getInput(ladoBau)
 end
 
 -- Loop infinito
