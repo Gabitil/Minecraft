@@ -23,6 +23,6 @@ while true do
   else
     redstone.setOutput("back", false)
   end
-  
-  -- Aguarde um curto período antes de verificar novamente (evitar loop muito rápido)
+
+  os.sleep(0.5)  -- Aguarda 0.5 segundos
 end
