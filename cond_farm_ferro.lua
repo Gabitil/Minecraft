@@ -20,12 +20,9 @@ while true do
   if redstoneAtivo() and bauVazio() then
     -- Coloque aqui a lógica para ligar a máquina
     redstone.setOutput("back", true)
-    print("Ligando a máquina!")
   else
-    print("Condição não atendida. Não é possível ligar a máquina.")
     redstone.setOutput("back", false)
   end
   
   -- Aguarde um curto período antes de verificar novamente (evitar loop muito rápido)
-  os.sleep(1)
 end
