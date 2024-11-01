@@ -5,7 +5,7 @@ local chests = {}
 for _, name in ipairs(peripheral.getNames()) do -- 'ipairs' retorna uma tabela com os indices e valores da tabela 'peripheral.getNames()'
     if peripheral.hasType(name, "minecraft:chest") then
         table.insert(chests, peripheral.wrap(name))
-        print("resultado wrap" .. peripheral.wrap(name))
+        print("resultado wrap" peripheral.wrap(name))
     end
 end
 
