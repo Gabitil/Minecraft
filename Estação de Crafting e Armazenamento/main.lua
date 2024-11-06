@@ -13,7 +13,7 @@ end
 for i, chest in ipairs(chests) do
     print("Bau " .. i .. ":")
     local items = chest.list()
-    for slot, item in pairs(items) do -- 'pairs' retorna uma tabela com os indices e valores da tabela 'items'
+    for slot, item in pairs(items) do -- 'pairs' retorna uma tabela com os indices e valores da tabela 'items' asfdasfasfasdas
         print("Slot " .. slot .. ": " .. item.name .. " x" .. item.count)
     end
 
