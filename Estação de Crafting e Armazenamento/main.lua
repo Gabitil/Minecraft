@@ -1,7 +1,7 @@
 -- Tabela para armazenar os baus
 local printer = peripheral.find("printer")
 local chests = {}
-i=1
+i=3
 printer.newPage()
 printer.setPageTitle("Teste impressora")
 -- Procura por perifericos do tipo "minecraft:chest" e adiciona cada um à tabela 'chests'
@@ -11,7 +11,7 @@ for _, name in ipairs(peripheral.getNames()) do -- 'ipairs' retorna uma tabela c
        
         printer.write("resultado wrap", peripheral.wrap(name))
         printer.setCursorPos(1,i)
-        i+1
+        i=i+1
 
     end
 end
@@ -21,12 +21,12 @@ for i, chest in ipairs(chests) do
 
     printer.write("Bau " .. i .. ":")
     printer.setCursorPos(1,i)
-    i+1
+    i=i+1
     local items = chest.list()
     for slot, item in pairs(items) do -- 'pairs' retorna uma tabela com os indices e valores da tabela 'items' asfdasfasfasdas
         printer.write("Slot " .. slot .. ": " .. item.name .. " x" .. item.count)
         printer.setCursorPos(1,i)
-        i+1
+        i=i+1
     end
 
 
