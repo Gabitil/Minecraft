@@ -41,9 +41,8 @@ if monitor then
     end
 
     -- Exemplo: transferindo itens entre baús
-    if #chests >= 2 then
-        transferirItens(chests[1], chests[2])
-        transferirItens(chests[2], chests[1])
+    for i = 1, #chests - 1 do
+        transferirItens(chests[i], chests[i + 1])
     end
 
     -- Exemplo: acessando itens de todos os baús
