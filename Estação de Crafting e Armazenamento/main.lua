@@ -1,7 +1,6 @@
 -- Tabela para armazenar os baus
 local printer = peripheral.find("printer")
 local chests = {}
-i=3
 -- Verifica se a impressora foi encontrada
 if not printer then
     error("Nenhuma impressora foi encontrada.")
@@ -73,7 +72,7 @@ for _, name in ipairs(peripheral.getNames()) do -- 'ipairs' retorna uma tabela c
     if peripheral.hasType(name, "minecraft:chest") then
         table.insert(chests, peripheral.wrap(name))
        
-        print_line("resultado wrap", peripheral.wrap(name))
+        print_line("resultado wrap", chests)
 
 
     end
