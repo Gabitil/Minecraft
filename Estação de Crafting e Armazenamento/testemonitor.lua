@@ -11,9 +11,6 @@ if monitor then
     for _, name in ipairs(peripheral.getNames()) do
         if peripheral.hasType(name, "minecraft:chest") then
             table.insert(chests, peripheral.wrap(name))
-            monitor.write("Baú encontrado: " .. name)
-            line = line + 1
-            monitor.setCursorPos(1, line)  -- Move para a próxima linha
         end
     end
 
