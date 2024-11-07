@@ -34,13 +34,15 @@ if monitor then
         end
     end
 
+    if #chests > 1 then
+        transferirItens(chests[1], chests[2])
+    end
+
     -- Exemplo: acessando itens de todos os baús
     for i, chest in ipairs(chests) do
         local items = chest.list()
 
-        if #chests > 1 then
-            transferirItens(chests[1], chests[2])
-        end
+
 
         monitor.write("Bau " .. i .. ":")
         line = line + 1
