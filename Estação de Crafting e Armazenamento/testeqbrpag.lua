@@ -62,7 +62,7 @@ end
 printer.newPage()
 printer.setPageTitle("Teste de Impressão com Quebra e Palavra Completa")
 
-local texto_teste = "Este é um exemplo de texto muito longo que precisa quebrar as linhas automaticamente sem dividir palavras ao meio. O texto deve ser organizado em várias páginas, se necessário."
+local texto_teste = "Este é um exemplo de texto muito longo que precisa quebrar as linhas automaticamente sem dividir palavras ao meio. O texto deve ser organizado em várias páginas, se necessário, então vou ficar aqui digitando qualquer coisa ate eu ficar enjoado, então, a vida é complicada, somente os poderosos tem o direito de viver o resto só existe, estão a merce do capitalismo e das suas vontades, como viver de verdade em um mundo em que o consumismo é forçado na sua guela, tudo tem um preço até mesmo a sua vida."
 print_line(texto_teste)
 
 printer.endPage()
