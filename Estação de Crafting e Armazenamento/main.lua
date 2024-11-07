@@ -20,7 +20,7 @@ local function transferirItens(chest1, chest2)
                 -- Caso o baú1 tenha espaço, mova os itens do baú2 para o baú1
                 if espacoNoBau1 > 0 and item2.count > 0 then
                     local quantidadeTransferir = math.min(espacoNoBau1, item2.count)
-                    chest2.pushItems(peripheral.getName(chest1), slot2, quantidadeTransferir, slot1)-- 
+                    chest2.pushItems(peripheral.getName(chest1), slot2, quantidadeTransferir)
                     print("Transferindo " .. quantidadeTransferir .. " " .. item2.name .. " de Bau 2 para Bau 1")
                 end
             end
@@ -40,11 +40,14 @@ if monitor then
         end
     end
 
-    -- Exemplo: transferindo itens entre baús
-    for i = 1, #chests - 1 do
-        transferirItens(chests[i], chests[i + 1])
+    -- Exemplo: prucura itens para transferir em todos os baus
+    for i, chest1 in ipairs(chests) do
+        for j, chest2 in ipairs(chests) do
+            if i ~= j then
+                transferirItens(chest1, chest2)
+            end
+        end
     end
-
     -- Exemplo: acessando itens de todos os baús
     for i, chest in ipairs(chests) do
         local items = chest.list()
