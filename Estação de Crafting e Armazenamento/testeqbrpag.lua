@@ -36,7 +36,7 @@ end
 printer.newPage()
 printer.setPageTitle("Teste de Impressão com Quebra")
 
-local texto_teste = "Exemplo de texto muito longo que precisa quebrar a linha automaticamente quando atinge o limite da página. O texto deve ser organizado em várias páginas, se necessário."
+local texto_teste = "A amizade consegue ser tão complexa. Deixa uns desanimados, outros bem felizes. É a alimentação dos fracos É o reino dos fortes. Faz-nos cometer erros Os fracos deixam se ir abaixo Os fortes erguem sempre a cabeça Os assim assumem-nos."
 print_line(texto_teste)
 
 printer.endPage()
