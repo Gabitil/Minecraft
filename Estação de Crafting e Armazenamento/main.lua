@@ -9,10 +9,13 @@ local function transferirItens(chest1, chest2)
         return
     end
 
-    -- Percorrer os slots dos baús
+    -- Cria uma tabela para armazenar os itens do baú 2
+    local itemsChest2 = chest2.list()
+
+    -- Percorrer os slots do baú 1
     for slot1, item1 in pairs(chest1.list()) do
         -- Verificar se há itens de mesmo tipo no segundo baú
-        for slot2, item2 in pairs(chest2.list()) do
+        for slot2, item2 in pairs(itemsChest2) do
             if item1.name == item2.name then
                 local espacoNoBau1 = 64 - item1.count
                 local espacoNoBau2 = 64 - item2.count
@@ -41,18 +44,15 @@ if monitor then
     end
 
     -- Exemplo: prucura itens para transferir em todos os baus
-    for i, chest1 in ipairs(chests) do
-        for j, chest2 in ipairs(chests) do
-            if i ~= j then
-                transferirItens(chest1, chest2)
-            end
+    for i = 1, #chests - 1 do
+        for j = i + 1, #chests do
+            transferirItens(chests[i], chests[j])
         end
     end
+
     -- Exemplo: acessando itens de todos os baús
     for i, chest in ipairs(chests) do
         local items = chest.list()
-
-
 
         monitor.write("Bau " .. i .. ":")
         line = line + 1
