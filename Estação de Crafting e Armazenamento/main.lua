@@ -15,7 +15,7 @@ local function transferirItens(chest1, chest2)
                 if espacoNoBau1 > 0 and item2.count > 0 then
                     local quantidadeTransferir = math.min(espacoNoBau1, item2.count)
                     chest2.pushItems(peripheral.getName(chest1), slot2, quantidadeTransferir)
-                    print("Transferindo " .. quantidadeTransferir .. " " .. item2.name .. " de Baú 2 para Baú 1")
+                    print("Transferindo " .. quantidadeTransferir .. " " .. item2.name .. " de Bau 2 para Bau 1")
                 end
             end
         end
@@ -42,7 +42,7 @@ if monitor then
             transferirItens(chests[1], chests[2])
         end
 
-        monitor.write("Baú " .. i .. ":")
+        monitor.write("Bau " .. i .. ":")
         line = line + 1
         monitor.setCursorPos(1, line)
         
@@ -61,5 +61,5 @@ if monitor then
         end
     end
 else
-    print("Monitor não encontrado!")
+    print("Monitor nao encontrado!")
 end
