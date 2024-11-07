@@ -1,16 +1,53 @@
 local printer = peripheral.find("printer")
 
-local page_limit = 25  -- Número máximo de linhas por página, ajuste conforme necessário
+local page_limit = 25  -- Número máximo de linhas por página
 local line_length = 20 -- Limite de caracteres por linha
-local line_count = 1   -- Contador de linhas para cada página
+local line_count = 1   -- Contador de linhas por página
 
--- Função para checar e ajustar quebra de linha e página
+-- Função para checar e ajustar a quebra de linha e página com controle de palavras
 local function print_line(text)
-    -- Quebra o texto em várias linhas se ultrapassar o comprimento máximo
-    while #text > line_length do
-        printer.write(text:sub(1, line_length))  -- Escreve a linha no limite
-        text = text:sub(line_length + 1)         -- Remove a parte impressa do texto
+    local words = {} -- Tabela para armazenar palavras
+
+    -- Divide o texto em palavras usando espaço como separador
+    for word in text:gmatch("%S+") do
+        table.insert(words, word)
+    end
+
+    local line_text = ""  -- Texto acumulado para a linha atual
+
+    for _, word in ipairs(words) do
+        -- Se adicionar a palavra à linha atual ultrapassar o limite, imprime a linha e começa uma nova
+        if #line_text + #word + 1 > line_length then
+            printer.write(line_text)  -- Escreve a linha atual
+            line_count = line_count + 1
+            
+            -- Verifica se a página atingiu o limite de linhas
+            if line_count > page_limit then
+                printer.endPage()
+                printer.newPage()
+                printer.setPageTitle("Nova Página")
+                line_count = 1
+            end
+            
+            -- Configura o cursor para a próxima linha e inicia uma nova linha
+            printer.setCursorPos(1, line_count)
+            line_text = word -- Reinicia com a palavra atual
+        else
+            -- Adiciona a palavra à linha atual com um espaço, se não estiver vazia
+            if #line_text > 0 then
+                line_text = line_text .. " " .. word
+            else
+                line_text = word
+            end
+        end
+    end
+
+    -- Imprime qualquer conteúdo restante em `line_text`
+    if #line_text > 0 then
+        printer.write(line_text)
         line_count = line_count + 1
+
+        -- Verifica se precisa de uma nova página
         if line_count > page_limit then
             printer.endPage()
             printer.newPage()
@@ -19,24 +56,13 @@ local function print_line(text)
         end
         printer.setCursorPos(1, line_count)
     end
-
-    -- Imprime o restante do texto
-    printer.write(text)
-    line_count = line_count + 1
-    if line_count > page_limit then
-        printer.endPage()
-        printer.newPage()
-        printer.setPageTitle("Nova Página")
-        line_count = 1
-    end
-    printer.setCursorPos(1, line_count)
 end
 
--- Exemplo de uso com textos longos
+-- Exemplo de uso
 printer.newPage()
-printer.setPageTitle("Teste de Impressão com Quebra")
+printer.setPageTitle("Teste de Impressão com Quebra e Palavra Completa")
 
-local texto_teste = "A amizade consegue ser tão complexa. Deixa uns desanimados, outros bem felizes. É a alimentação dos fracos É o reino dos fortes. Faz-nos cometer erros Os fracos deixam se ir abaixo Os fortes erguem sempre a cabeça Os assim assumem-nos."
+local texto_teste = "Este é um exemplo de texto muito longo que precisa quebrar as linhas automaticamente sem dividir palavras ao meio. O texto deve ser organizado em várias páginas, se necessário."
 print_line(texto_teste)
 
 printer.endPage()
