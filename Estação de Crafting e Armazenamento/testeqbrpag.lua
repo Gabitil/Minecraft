@@ -1,5 +1,12 @@
+-- Tabela para armazenar os baus
 local printer = peripheral.find("printer")
+local chests = {}
+-- Verifica se a impressora foi encontrada
+if not printer then
+    error("Nenhuma impressora foi encontrada.")
+end
 
+-- Configurações de impressão
 local page_limit = 25  -- Número máximo de linhas por página
 local line_length = 20 -- Limite de caracteres por linha
 local line_count = 1   -- Contador de linhas por página
@@ -58,11 +65,28 @@ local function print_line(text)
     end
 end
 
--- Exemplo de uso
+
+-- Procura por perifericos do tipo "minecraft:chest" e adiciona cada um à tabela 'chests'
 printer.newPage()
-printer.setPageTitle("Teste de Impressão com Quebra e Palavra Completa")
+for _, name in ipairs(peripheral.getNames()) do -- 'ipairs' retorna uma tabela com os indices e valores da tabela 'peripheral.getNames()'
+    if peripheral.hasType(name, "minecraft:chest") then
+        table.insert(chests, peripheral.wrap(name))
+       
+        print_line("resultado wrap", chests)
 
-local texto_teste = "Este é um exemplo de texto muito longo que precisa quebrar as linhas automaticamente sem dividir palavras ao meio. O texto deve ser organizado em várias páginas, se necessário, então vou ficar aqui digitando qualquer coisa ate eu ficar enjoado, então, a vida é complicada, somente os poderosos tem o direito de viver o resto só existe, estão a merce do capitalismo e das suas vontades, como viver de verdade em um mundo em que o consumismo é forçado na sua guela, tudo tem um preço até mesmo a sua vida."
-print_line(texto_teste)
 
+    end
+end
+
+-- Exemplo: acessando itens de todos os baús
+for i, chest in ipairs(chests) do
+
+    print_line("Bau " .. i .. ":")
+    local items = chest.list()
+    for slot, item in pairs(items) do -- 'pairs' retorna uma tabela com os indices e valores da tabela 'items' asfdasfasfasdas
+        print_line("Slot " .. slot .. ": " .. item.name .. " x" .. item.count)
+    end
+
+
+end
 printer.endPage()

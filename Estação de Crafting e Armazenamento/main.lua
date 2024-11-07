@@ -2,28 +2,25 @@ local monitor = peripheral.find("monitor")
 local chests = {}
 local line = 1
 
-    
 local function transferirItens(chest1, chest2)
     -- Percorrer os slots dos baús
     for slot1, item1 in pairs(chest1.list()) do
         -- Verificar se há itens de mesmo tipo no segundo baú
         for slot2, item2 in pairs(chest2.list()) do
             if item1.name == item2.name then
-                local espaçoNoBaú1 = 64 - item1.count
-                local espaçoNoBaú2 = 64 - item2.count
-                
+                local espacoNoBau1 = 64 - item1.count
+                local espacoNoBau2 = 64 - item2.count
+
                 -- Caso o baú1 tenha espaço, mova os itens do baú2 para o baú1
-                if espaçoNoBaú1 > 0 and item2.count > 0 then
-                    local quantidadeTransferir = math.min(espaçoNoBaú1, item2.count)
-                    chest2.pushItems(chest1, slot2, quantidadeTransferir)
+                if espacoNoBau1 > 0 and item2.count > 0 then
+                    local quantidadeTransferir = math.min(espacoNoBau1, item2.count)
+                    chest2.pushItems(peripheral.getName(chest1), slot2, quantidadeTransferir)
                     print("Transferindo " .. quantidadeTransferir .. " " .. item2.name .. " de Baú 2 para Baú 1")
                 end
             end
         end
     end
 end
-    
-
 
 -- Verifica se o monitor foi encontrado
 if monitor then
@@ -40,7 +37,7 @@ if monitor then
     -- Exemplo: acessando itens de todos os baús
     for i, chest in ipairs(chests) do
         local items = chest.list()
-        
+
         if #chests > 1 then
             transferirItens(chests[1], chests[2])
         end
@@ -55,9 +52,11 @@ if monitor then
             monitor.setCursorPos(1, line)
 
             -- Checa se o monitor alcançou o limite de linhas, e limpa para a próxima página se necessário
-            if line > monitor.getSize() then
+            local width, height = monitor.getSize()
+            if line > height then
                 monitor.clear()
                 line = 1
+                monitor.setCursorPos(1, line)
             end
         end
     end
