@@ -3,6 +3,12 @@ local chests = {}
 local line = 1
 
 local function transferirItens(chest1, chest2)
+    -- Verifica se os baús são válidos
+    if not chest1 or not chest2 then
+        print("Um ou ambos os baús não são válidos.")
+        return
+    end
+
     -- Percorrer os slots dos baús
     for slot1, item1 in pairs(chest1.list()) do
         -- Verificar se há itens de mesmo tipo no segundo baú
@@ -34,8 +40,10 @@ if monitor then
         end
     end
 
-    if #chests > 1 then
+    -- Exemplo: transferindo itens entre baús
+    if #chests >= 2 then
         transferirItens(chests[1], chests[2])
+        transferirItens(chests[2], chests[1])
     end
 
     -- Exemplo: acessando itens de todos os baús
@@ -48,6 +56,7 @@ if monitor then
         line = line + 1
         monitor.setCursorPos(1, line)
         
+        -- Exibe os itens de cada baú
         for slot, item in pairs(items) do
             monitor.write("Slot " .. slot .. ": " .. item.name .. " x" .. item.count)
             line = line + 1
