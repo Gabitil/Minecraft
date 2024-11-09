@@ -28,7 +28,7 @@ local function transferirItens(chest1, chest2)
                     
                     -- Atualiza o monitor
                     monitor.setCursorPos(1, line)
-                    monitor.write("Transferindo " .. quantidadeTransferir .. " " .. item1.name .. " de " .. chest1.getName() .. " para " .. chest2.getName())
+                    monitor.write("Transferindo " .. quantidadeTransferir .. " " .. item1.name .. " de " .. chest1 .. " para " .. chest2)
                     line = line + 1
 
                     -- Transfere os itens
