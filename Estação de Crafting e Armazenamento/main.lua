@@ -17,8 +17,31 @@ local function procurarItensNaoCompletos(chests)
     end
 end
 
+--função para conferir se tem mais de um item igual incompleto, se não tiver exclui da lista de procurar
+local function conferirItensNaoCompletos()
+
+    local temIgual = false;
+    for i, item in ipairs(itensNaoCompletos) do
+        for j, item2 in ipairs(itensNaoCompletos) do
+            if i ~= j and item.item.name == item2.item.name then
+                temIgual = true
+            end
+        end
+        if not temIgual then
+            table.remove(itensNaoCompletos, i)
+        end
+    end
+    return false
+    
+end
+
 --função que recebe dois baús e transfere os itens
 local function transferirItens()
+    if #itensNaoCompletos == 0 then
+        print("Não há itens incompletos para transferir.")
+        return
+    end
+
     for i, item in ipairs(itensNaoCompletos) do
         for j, item2 in ipairs(itensNaoCompletos) do
             if i ~= j and item.item.name == item2.item.name and item.item.count < 64 then
@@ -54,6 +77,12 @@ if monitor then
 
     local tempoContagem = os.time() - inicioContagem
     print("Tempo de contagem dos itens: " .. tempoContagem .. " segundos")
+
+    -- Conferir se tem mais de um item igual incompleto, se não tiver exclui da lista de procurar
+    local inicioConferir = os.time()
+    conferirItensNaoCompletos()
+    local tempoConferir = os.time() - inicioConferir
+    print("Tempo de conferir itens: " .. tempoConferir .. " segundos")
 
     -- itera dentro da lista itens não completos e vai completando os itens
     local inicioTransferencia = os.time()
