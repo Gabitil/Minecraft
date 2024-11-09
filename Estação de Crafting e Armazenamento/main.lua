@@ -28,7 +28,7 @@ local function transferirItens(chest1, chest2)
                     
                     -- Atualiza o monitor
                     monitor.setCursorPos(1, line)
-                    monitor.write("Transferindo " .. quantidadeTransferir .. " " .. item1.name .. " de " .. chest1 .. " para " .. chest2)
+                    monitor.write("Transferindo " .. quantidadeTransferir .. " " .. item1.name .. " de " .. peripheral.getName(chest1) .. " para " .. peripheral.getName(chest2))
                     line = line + 1
 
                     -- Transfere os itens
@@ -45,10 +45,10 @@ if monitor then
     monitor.clear()
     monitor.setCursorPos(1, 1)
 
-    -- Itera sobre os periféricos conectados
-    for _, name in ipairs(peripheral.getNames()) do
-        if peripheral.hasType(name, "minecraft:chest") then
-            table.insert(chests, peripheral.wrap(name))
+    -- Itera sobre os perifericos conectados
+    for _, name in ipairs(peripheral.getNames()) do --
+        if peripheral.hasType(name, "minecraft:chest") then -- Se o periférico for um baú, adiciona na tabela
+            table.insert(chests, peripheral.wrap(name)) -- dentro da tabela os dados são: {peripheral.wrap(name), name}
         end
     end
 
