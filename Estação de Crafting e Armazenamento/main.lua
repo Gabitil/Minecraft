@@ -19,12 +19,12 @@ end
 
 --função que recebe dois baús e transfere os itens
 local function transferirItens()
-    for _, item in ipairs(itensNaoCompletos) do
-        for _, item2 in ipairs(itensNaoCompletos) do
-            if item.item.name == item2.item.name and item.item.count < 64 then
+    for i, item in ipairs(itensNaoCompletos) do
+        for j, item2 in ipairs(itensNaoCompletos) do
+            if i ~= j and item.item.name == item2.item.name and item.item.count < 64 then
                 local transferir = math.min(64 - item.item.count, item2.item.count)
-                item.chest.pushItems(peripheral.getName(item.chest), item.slot, transferir)
-                item2.chest.pushItems(peripheral.getName(item2.chest), item2.slot, -transferir)
+                item.chest.pushItems(peripheral.getName(item2.chest), item2.slot, transferir)
+                item2.chest.pushItems(peripheral.getName(item.chest), item.slot, transferir)
                 item.item.count = item.item.count + transferir
                 item2.item.count = item2.item.count - transferir
             end
