@@ -2,77 +2,63 @@ local monitor = peripheral.find("monitor")
 local chests = {}
 local line = 1
 
+-- Função para transferir itens de um baú para outro
 local function transferirItens(chest1, chest2)
-    -- Verifica se os baús são válidos
     if not chest1 or not chest2 then
-        print("Um ou ambos os baús não são válidos.")
         return
     end
 
-    -- Cria uma tabela para armazenar os itens do baú 2
+    -- Tabela dos itens do baú 1 para evitar acessar slots repetidamente
+    local itemsChest1 = chest1.list()
     local itemsChest2 = chest2.list()
 
-    -- Percorrer os slots do baú 1
-    for slot1, item1 in pairs(chest1.list()) do
-        -- Verificar se há itens de mesmo tipo no segundo baú
+    -- Itera sobre os itens do baú 1
+    for slot1, item1 in pairs(itemsChest1) do 
+        -- Itera sobre os itens do baú 2
         for slot2, item2 in pairs(itemsChest2) do
+            -- Se os itens forem iguais, transfere a quantidade máxima possível
             if item1.name == item2.name then
+                -- Calcula o espaço no baú 1
                 local espacoNoBau1 = 64 - item1.count
-                local espacoNoBau2 = 64 - item2.count
+                -- Calcula a quantidade a ser transferida
+                local quantidadeTransferir = math.min(espacoNoBau1, item2.count)
+                
+                -- Se a quantidade a ser transferida for maior que 0, transfere
+                if quantidadeTransferir > 0 then
+                    
+                    -- Atualiza o monitor
+                    monitor.setCursorPos(1, line)
+                    monitor.write("Transferindo " .. quantidadeTransferir .. " " .. item1.name .. " de " .. chest1.getName() .. " para " .. chest2.getName())
+                    line = line + 1
 
-                -- Caso o baú1 tenha espaço, mova os itens do baú2 para o baú1
-                if espacoNoBau1 > 0 and item2.count > 0 then
-                    local quantidadeTransferir = math.min(espacoNoBau1, item2.count)
+                    -- Transfere os itens
                     chest2.pushItems(peripheral.getName(chest1), slot2, quantidadeTransferir)
-                    print("Transferindo " .. quantidadeTransferir .. " " .. item2.name .. " de Bau 2 para Bau 1")
+                    item1.count = item1.count + quantidadeTransferir
+                    item2.count = item2.count - quantidadeTransferir
                 end
             end
         end
     end
 end
 
--- Verifica se o monitor foi encontrado
 if monitor then
-    monitor.clear()  -- Limpa a tela do monitor
-    monitor.setCursorPos(1, 1)  -- Inicia na posição (1,1)
-    
-    -- Procura por periféricos do tipo "minecraft:chest" e adiciona cada um à tabela 'chests'
+    monitor.clear()
+    monitor.setCursorPos(1, 1)
+
+    -- Itera sobre os periféricos conectados
     for _, name in ipairs(peripheral.getNames()) do
         if peripheral.hasType(name, "minecraft:chest") then
             table.insert(chests, peripheral.wrap(name))
         end
     end
 
-    -- Exemplo: prucura itens para transferir em todos os baus
+    -- Itera sobre os baús
     for i = 1, #chests - 1 do
         for j = i + 1, #chests do
             transferirItens(chests[i], chests[j])
         end
     end
 
-    -- Exemplo: acessando itens de todos os baús
-    for i, chest in ipairs(chests) do
-        local items = chest.list()
-
-        monitor.write("Bau " .. i .. ":")
-        line = line + 1
-        monitor.setCursorPos(1, line)
-        
-        -- Exibe os itens de cada baú
-        for slot, item in pairs(items) do
-            monitor.write("Slot " .. slot .. ": " .. item.name .. " x" .. item.count)
-            line = line + 1
-            monitor.setCursorPos(1, line)
-
-            -- Checa se o monitor alcançou o limite de linhas, e limpa para a próxima página se necessário
-            local width, height = monitor.getSize()
-            if line > height then
-                monitor.clear()
-                line = 1
-                monitor.setCursorPos(1, line)
-            end
-        end
-    end
 else
     print("Monitor nao encontrado!")
 end
