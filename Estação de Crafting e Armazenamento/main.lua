@@ -1,6 +1,7 @@
 local monitor = peripheral.find("monitor")
 local chests = {}
 local line = 1
+local startTime = os.time() -- Marca o início
 
 -- Função para transferir itens de um baú para outro
 local function transferirItens(chest1, chest2)
@@ -46,19 +47,34 @@ if monitor then
     monitor.setCursorPos(1, 1)
 
     -- Itera sobre os perifericos conectados
+    local inicioPerifericos = os.time()
     for _, name in ipairs(peripheral.getNames()) do --
         if peripheral.hasType(name, "minecraft:chest") then -- Se o periférico for um baú, adiciona na tabela
             table.insert(chests, peripheral.wrap(name)) -- dentro da tabela os dados são: {peripheral.wrap(name), name}
         end
     end
+    local tempoPerifericos = os.time() - inicioPerifericos
+    print("Tempo de busca dos periféricos: " .. tempoPerifericos .. " segundos")
 
     -- Itera sobre os baús
     for i = 1, #chests - 1 do
+
+        local inicioTransferencia = os.time()
         for j = i + 1, #chests do
             transferirItens(chests[i], chests[j])
         end
+
+        local tempoTransferencia = os.time() - inicioTransferencia
+        print("Tempo de transferência dos itens: " .. tempoTransferencia .. " segundos")
     end
 
 else
     print("Monitor nao encontrado!")
 end
+
+
+-- Calcula o tempo de execução
+local endTime = os.time()
+local tempoExecucao = endTime - startTime /20 
+
+print("Tempo de execução: " .. tempoExecucao .. " segundos")
