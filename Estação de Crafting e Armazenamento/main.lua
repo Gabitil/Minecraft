@@ -2,45 +2,36 @@ local monitor = peripheral.find("monitor")
 local chests = {}
 local line = 1
 local startTime = os.time() -- Marca o início
+-- lista que guarda os itens não completos, seu slot e bau
+local itensNaoCompletos = {}
 
--- Função para transferir itens de um baú para outro
-local function transferirItens(chest1, chest2)
-    if not chest1 or not chest2 then
-        return
-    end
 
-    -- Tabela dos itens do baú 1 para evitar acessar slots repetidamente
-    local itemsChest1 = chest1.list()
-    local itemsChest2 = chest2.list()
-
-    -- Itera sobre os itens do baú 1
-    for slot1, item1 in pairs(itemsChest1) do 
-        -- Itera sobre os itens do baú 2
-        for slot2, item2 in pairs(itemsChest2) do
-            -- Se os itens forem iguais, transfere a quantidade máxima possível
-            if item1.name == item2.name then
-                -- Calcula o espaço no baú 1
-                local espacoNoBau1 = 64 - item1.count
-                -- Calcula a quantidade a ser transferida
-                local quantidadeTransferir = math.min(espacoNoBau1, item2.count)
-                
-                -- Se a quantidade a ser transferida for maior que 0, transfere
-                if quantidadeTransferir > 0 then
-                    
-                    -- Atualiza o monitor
-                    monitor.setCursorPos(1, line)
-                    monitor.write("Transferindo " .. quantidadeTransferir .. " " .. item1.name .. " de " .. peripheral.getName(chest1) .. " para " .. peripheral.getName(chest2))
-                    line = line + 1
-
-                    -- Transfere os itens
-                    chest2.pushItems(peripheral.getName(chest1), slot2, quantidadeTransferir)
-                    item1.count = item1.count + quantidadeTransferir
-                    item2.count = item2.count - quantidadeTransferir
-                end
+--função  que recebe a lista chests para procurar itens não completos
+local function procurarItensNaoCompletos(chests)
+    for _, chest in ipairs(chests) do
+        for slot, item in pairs(chest.list()) do
+            if item.count < 64 then
+                table.insert(itensNaoCompletos, {chest = chest, slot = slot, item = item})
             end
         end
     end
 end
+
+--função que recebe dois baús e transfere os itens
+local function transferirItens()
+    for _, item in ipairs(itensNaoCompletos) do
+        for _, item2 in ipairs(itensNaoCompletos) do
+            if item.item.name == item2.item.name and item.item.count < 64 then
+                local transferir = math.min(64 - item.item.count, item2.item.count)
+                item.chest.pushItems(peripheral.getName(item.chest), item.slot, transferir)
+                item2.chest.pushItems(peripheral.getName(item2.chest), item2.slot, -transferir)
+                item.item.count = item.item.count + transferir
+                item2.item.count = item2.item.count - transferir
+            end
+        end
+    end
+end
+
 
 if monitor then
     monitor.clear()
@@ -53,22 +44,27 @@ if monitor then
             table.insert(chests, peripheral.wrap(name)) -- dentro da tabela os dados são: {peripheral.wrap(name), name}
         end
     end
+
     local tempoPerifericos = os.time() - inicioPerifericos
     print("Tempo de busca dos periféricos: " .. tempoPerifericos .. " segundos")
 
-    -- Itera sobre os baús
+    local inicioContagem = os.time()
+    -- Procura itens não completos
+    procurarItensNaoCompletos(chests)
+
+    local tempoContagem = os.time() - inicioContagem
+    print("Tempo de contagem dos itens: " .. tempoContagem .. " segundos")
+
+    -- itera dentro da lista itens não completos e vai completando os itens
     local inicioTransferencia = os.time()
-    for i = 1, #chests do
-        for j = 1, #chests do
-            if i ~= j then
-                transferirItens(chests[i], chests[j])
-            end
-        end
-    end
-    
+
+    transferirItens()
+
     local tempoTransferencia = os.time() - inicioTransferencia
     print("Tempo de transferência dos itens: " .. tempoTransferencia .. " segundos")
-else
+
+    
+    else
     print("Monitor nao encontrado!")
 end
 
