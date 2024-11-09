@@ -57,17 +57,17 @@ if monitor then
     print("Tempo de busca dos periféricos: " .. tempoPerifericos .. " segundos")
 
     -- Itera sobre os baús
-    for i = 1, #chests - 1 do
-
-        local inicioTransferencia = os.time()
-        for j = i + 1, #chests do
-            transferirItens(chests[i], chests[j])
+    local inicioTransferencia = os.time()
+    for i = 1, #chests do
+        for j = 1, #chests do
+            if i ~= j then
+                transferirItens(chests[i], chests[j])
+            end
         end
-
-        local tempoTransferencia = os.time() - inicioTransferencia
-        print("Tempo de transferência dos itens: " .. tempoTransferencia .. " segundos")
     end
-
+    
+    local tempoTransferencia = os.time() - inicioTransferencia
+    print("Tempo de transferência dos itens: " .. tempoTransferencia .. " segundos")
 else
     print("Monitor nao encontrado!")
 end
