@@ -46,6 +46,9 @@ local function transferirItens()
         for j, item2 in ipairs(itensNaoCompletos) do
             if i ~= j and item.item.name == item2.item.name then
                 local transferir = math.min(item.item.count, item2.item.count)
+                monitor.setCursorPos(1, line)
+                monitor.write("Transferindo " .. transferir .. " " .. item.item.name .. " do bau " .. peripheral.getName(item.chest) .. " para o bau " .. peripheral.getName(item2.chest))
+                line = line + 1
                 item.chest.pushItems(peripheral.getName(item2.chest), item2.slot, transferir)
                 item2.chest.pushItems(peripheral.getName(item.chest), item.slot, transferir)
                 item.item.count = item.item.count + transferir
