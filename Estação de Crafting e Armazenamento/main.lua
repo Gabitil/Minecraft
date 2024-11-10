@@ -10,7 +10,7 @@ local itensNaoCompletos = {}
 local function procurarItensNaoCompletos(chests)
     for _, chest in ipairs(chests) do
         for slot, item in pairs(chest.list()) do
-            if item.count < item.getItemLimit(slot) then
+            if item.count < item.item.getItemLimit(item.slot) then
                 table.insert(itensNaoCompletos, {chest = chest, slot = slot, item = item})
             end
         end
