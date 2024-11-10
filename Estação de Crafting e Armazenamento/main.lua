@@ -10,7 +10,7 @@ local itensNaoCompletos = {}
 local function procurarItensNaoCompletos(chests)
     for _, chest in ipairs(chests) do
         for slot, item in pairs(chest.list()) do
-            if item.count < chest.getItemLimit(item) then
+            if item.count < chest.getItemLimit(slot) then
                 table.insert(itensNaoCompletos, {chest = chest, slot = slot, item = item})
             end
         end
@@ -45,7 +45,7 @@ local function transferirItens()
     for i, item in ipairs(itensNaoCompletos) do
         for j, item2 in ipairs(itensNaoCompletos) do
             if i ~= j and item.item.name == item2.item.name then
-                local transferir = item.item.getItemLimit(item.slot) - item.item.count
+                local transferir = math.min(item.item.count, item2.item.count)
                 item.chest.pushItems(peripheral.getName(item2.chest), item2.slot, transferir)
                 item2.chest.pushItems(peripheral.getName(item.chest), item.slot, transferir)
                 item.item.count = item.item.count + transferir
