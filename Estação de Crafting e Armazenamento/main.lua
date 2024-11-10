@@ -38,7 +38,7 @@ end
 --função que recebe dois baús e transfere os itens
 local function transferirItens()
     if #itensNaoCompletos == 0 then
-        print("Não há itens incompletos para transferir.")
+        print("Nao ha itens incompletos para transferir.")
         return
     end
 
@@ -69,7 +69,7 @@ if monitor then
     end
 
     local tempoPerifericos = os.time() - inicioPerifericos
-    print("Tempo de busca dos periféricos: " .. tempoPerifericos .. " segundos")
+    print("Tempo de busca dos perifericos: " .. tempoPerifericos .. " segundos")
 
     local inicioContagem = os.time()
     -- Procura itens não completos
@@ -90,7 +90,7 @@ if monitor then
     transferirItens()
 
     local tempoTransferencia = os.time() - inicioTransferencia
-    print("Tempo de transferência dos itens: " .. tempoTransferencia .. " segundos")
+    print("Tempo de transferencia dos itens: " .. tempoTransferencia .. " segundos")
 
     
     else
@@ -102,4 +102,4 @@ end
 local endTime = os.time()
 local tempoExecucao = endTime - startTime /20 
 
-print("Tempo de execução: " .. tempoExecucao .. " segundos")
+print("Tempo de execucao: " .. tempoExecucao .. " segundos")
