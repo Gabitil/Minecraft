@@ -11,7 +11,7 @@ local function procurarItensNaoCompletos(chests)
     for _, chest in ipairs(chests) do
         for slot, item in pairs(chest.list()) do
             if item.count < chest.getItemLimit(slot) then
-                table.insert(itensNaoCompletos, {chest = chest, slot = slot, item = item})
+                table.insert(itensNaoCompletos, {chest = chest, slot = slot, item = item })
             end
         end
     end
@@ -23,7 +23,7 @@ local function conferirItensNaoCompletos()
     local temIgual = false;
     for i, item in ipairs(itensNaoCompletos) do
         for j, item2 in ipairs(itensNaoCompletos) do
-            if i ~= j and item.item.name == item2.item.name then
+            if i ~= j and item.item.displayName == item2.item.displayName then
                 temIgual = true
             end
         end

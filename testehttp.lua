@@ -27,6 +27,6 @@ local function exibirDadosMonitor(dados)
 end
 
 -- Chamada para exibir status
-local urlAPI = "https://api.exemplo.com/status"
+local urlAPI = "https://painel.enxadahost.com/server/b9622ad5/"
 local dadosServidor = requisitarAPI(urlAPI)
 exibirDadosMonitor(dadosServidor)
