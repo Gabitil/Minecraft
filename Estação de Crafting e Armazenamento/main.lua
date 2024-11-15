@@ -98,7 +98,7 @@ local status, err = pcall(function()
                 break
             end
                 for j, item2 in ipairs(itensNaoFinalizados) do -- Itera sobre a lista de itens não finalizados
-                    if item.slot ~= item2.slot and item.itemDetail.displayName == item2.itemDetail.displayName then -- Verifica se o slot é diferente e o nome é igual
+                    if item.slot ~= item2.slot and item.itemDetail.displayName == item2.itemDetail.displayName and item.itemDetail.count < item.chest.getItemLimit(item.slot) and item.itemDetail.count > 0 then -- Verifica se o nome é igual e o slot é diferente
                         local qntfalta = item.chest.getItemLimit(item.slot) - item.itemDetail.count -- Calcula a quantidade que falta para completar o stack
                         local qntTrans = 0 -- Quantidade a ser transferida
 
@@ -114,7 +114,6 @@ local status, err = pcall(function()
                         else                            
                             item.chest.pullItems(peripheral.getName(item2.chest), item2.slot, qntfalta, item.slot)
                             local falta = qntfalta - item2.itemDetail.count
-                            table.insert(itemfinalizado, item2)
                             qntTrans = item2.itemDetail.count
                             print("Transferindo " .. qntTrans .. " " .. item.itemDetail.displayName .. " do bau " .. peripheral.getName(item2.chest) .. " slot ".. item2.slot .. " para o bau " .. peripheral.getName(item.chest) .. " slot ".. item.slot .. " falta " .. falta)
                         end
