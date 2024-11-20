@@ -55,9 +55,9 @@ local status, err = pcall(function()
             for slot, item in pairs(chest.list()) do
                 -- Busca detalhes completos do item
                 local itemDetail = chest.getItemDetail(slot) -- Detalhes do item
-                if itemDetail and itemDetail.count < chest.getItemLimit(slot) then -- Verifica se o item é incompleto
+                if itemDetail and itemDetail.count < itemDetail.maxCount then -- Verifica se o item é incompleto
                     table.insert(itensNaoCompletos, {chest = chest, slot = slot, item = item, itemDetail = itemDetail}) -- Adiciona à lista de itens incompletos
-                    print("Item incompleto: " .. itemDetail.displayName .. " " .. itemDetail.count .. " limite: " .. chest.getItemLimit(slot))
+                    print("Item incompleto: " .. itemDetail.displayName .. " " .. itemDetail.count .. " limite: " .. itemDetail.maxCount)
                 end
             end
         end
@@ -76,23 +76,27 @@ local status, err = pcall(function()
             - Imprime no console uma mensagem indicando o item duplicado encontrado, incluindo seu nome, quantidade, slot e baú.
     ]]
     local function conferirItensNaoCompletos()
-        local temIgual = false
+        
         -- Itera sobre a lista de itens incompletos
         ::repete::
         for i, item in ipairs(itensNaoCompletos) do
+            local temIgual = false
             -- Verifica se existe um item igual na lista
             for j, item2 in ipairs(itensNaoCompletos) do
                 if i ~= j and item.itemDetail.displayName == item2.itemDetail.displayName then -- Verifica se o nome é igual e o slot é diferente
                     temIgual = true
                 end
+                if j == #itensNaoCompletos then
+                    if temIgual == false then
+                        table.remove(itensNaoCompletos, i)
+                        goto repete
+                    end
+                end
             end
-            
-            if temIgual == false then
-                table.remove(itensNaoCompletos, i) -- Remove o item da lista de itens incompletos
-                goto repete
-            end
+
         end
 
+        print("Tamanho da lista de itens incompletos depois da seleção: " .. #itensNaoCompletos)
     end
 
     
@@ -133,8 +137,8 @@ local status, err = pcall(function()
                         msmbs = true -- Verifica se é o mesmo bau e slot
                     end
 
-                    if msmbs == false and item.itemDetail.displayName == item2.itemDetail.displayName and item.itemDetail.count < item.chest.getItemLimit(item.slot) and item.itemDetail.count > 0 then -- Verifica se o nome é igual e o slot é diferente
-                        local qntfalta = item.chest.getItemLimit(item.slot) - item.itemDetail.count -- Calcula a quantidade que falta para completar o stack
+                    if msmbs == false and item.itemDetail.displayName == item2.itemDetail.displayName and item.itemDetail.count < item.itemDetail.maxCount and item.itemDetail.count > 0 then -- Verifica se o nome é igual e o slot é diferente
+                        local qntfalta = item.itemDetail.maxCount - item.itemDetail.count -- Calcula a quantidade que falta para completar o stack
                         local qntTrans = 0 -- Quantidade a ser transferida
 
                         if item2.itemDetail.count > qntfalta then -- Verifica se a quantidade do item2 é maior que a quantidade que falta
