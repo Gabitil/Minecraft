@@ -63,6 +63,13 @@ local status, err = pcall(function()
         end
     end
 
+    local function verificarIgualidade(item1, item2)
+        if item1.itemDetail.displayName == item2.itemDetail.displayName and item1.itemDetail.name == item2.itemDetail.name and item1.itemDetail.nbt == item2.itemDetail.nbt then
+            return true
+        end
+        return false
+    end
+
     --[[
         Função: conferirItensNaoCompletos
         Descrição: Verifica se há itens duplicados na lista de itens incompletos e mantém apenas os itens duplicados na lista.
@@ -83,7 +90,7 @@ local status, err = pcall(function()
             local temIgual = false
             -- Verifica se existe um item igual na lista
             for j, item2 in ipairs(itensNaoCompletos) do
-                if i ~= j and item.itemDetail.displayName == item2.itemDetail.displayName then -- Verifica se o nome é igual e o slot é diferente
+                if i ~= j and verificarIgualidade(item, item2) then
                     temIgual = true
                 end
                 if j == #itensNaoCompletos then
@@ -137,7 +144,7 @@ local status, err = pcall(function()
                         msmbs = true -- Verifica se é o mesmo bau e slot
                     end
 
-                    if msmbs == false and item.itemDetail.displayName == item2.itemDetail.displayName and item.itemDetail.count < item.itemDetail.maxCount and item.itemDetail.count > 0 then -- Verifica se o nome é igual e o slot é diferente
+                    if msmbs == false and verificarIgualidade(item,item2) and item.itemDetail.count < item.itemDetail.maxCount and item.itemDetail.count > 0 then -- Verifica se o nome é igual e o slot é diferente
                         local qntfalta = item.itemDetail.maxCount - item.itemDetail.count -- Calcula a quantidade que falta para completar o stack
                         local qntTrans = 0 -- Quantidade a ser transferida
 
