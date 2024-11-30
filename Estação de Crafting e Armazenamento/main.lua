@@ -59,9 +59,8 @@ local status, err = pcall(function()
                     table.insert(itensNaoCompletos, {chest = chest, slot = slot, item = item, itemDetail = itemDetail}) -- Adiciona à lista de itens incompletos
                     print("Item incompleto: " .. itemDetail.displayName .. " " .. itemDetail.count .. " limite: " .. itemDetail.maxCount)
                 end
-                os.pullEvent("yield")
             end
-            sleep(0)
+            sleep(10)
         end
     end
 
@@ -101,9 +100,8 @@ local status, err = pcall(function()
                         goto repete
                     end
                 end
-                os.pullEvent("yield")
             end
-            sleep(0)
+            sleep(10)
         end
 
         print("Tamanho da lista de itens incompletos depois da seleção: " .. #itensNaoCompletos)
@@ -182,9 +180,8 @@ local status, err = pcall(function()
                             goto reiniciar
                         end    
                     end
-                    os.pullEvent("yield")
                 end   
-                sleep(0)
+                sleep(10)
         end
     end
 
